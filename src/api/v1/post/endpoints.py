@@ -2,8 +2,13 @@ from fastapi import (
     APIRouter,
     Depends,
     status,
-    Request
+    Request,
+    File,
+    UploadFile,
+    Form,
+    HTTPException
 )
+import json
 from core.utils.responses import (
     EnvelopeResponse,
 )
@@ -13,9 +18,10 @@ from api.v1.post.services import CreatePostService
 from sqlalchemy.orm import Session
 from core.settings.database import get_session
 from uuid import UUID
+from typing import Optional
+
 
 router = APIRouter(prefix="/post", tags=["post"])
-
 
 @router.post(
     "/",
@@ -24,15 +30,24 @@ router = APIRouter(prefix="/post", tags=["post"])
     response_model=EnvelopeResponse
 )
 async def create(
-    request: Request,
-    payload: CreatePostSchema,
+    title: str,
+    content: str,
+    oxxo_name: str,
+    user_name:str,
+    #image: UploadFile = [File(...)],
     session: Session = Depends(get_session)
 ):
+    image = None
     log.info("Create Post")
-    return CreatePostService(session=session).create(payload=payload)
-
-
-
+    return CreatePostService(session=session).create(
+        CreatePostSchema(
+            title=title,
+            content=content,
+            oxxo_name=oxxo_name,
+            user_name=user_name
+        ),
+        image=image
+    )
 @router.patch(
     "/like/{post_id}",
     summary="Give like to post",

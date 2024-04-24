@@ -7,7 +7,6 @@ from core.utils.responses import create_envelope_response
 import cloudinary.uploader
 from core.settings import settings
 from openai import OpenAI
-from sqlalchemy import select
 
 from models.post import PostModel
 
@@ -30,19 +29,21 @@ class CreatePostService():
         )
         return tuple(response.choices[0].message.content.split("$$$"))
 
-    def upload_image(self, image_binary):
+    def upload_image(self, image):
         cloudinary.config(
             cloud_name=settings.CLOUDINARY_NAME,
             api_key=settings.CLOUDINARY_API_KEY,
             api_secret=settings.CLOUDINARY_API_SECRET
         )
-        upload_result = cloudinary.uploader.upload("roni.jpg")
+        upload_result = cloudinary.uploader.upload(image.file.read())
         image_url = upload_result['secure_url']
+
         return image_url
 
-    def create(self, payload: CreatePostSchema):
-        image_binary = payload.image
-        image_url = self.upload_image(image_binary)
+    def create(self, payload: CreatePostSchema,image=None):
+        image_url=None
+        if image:
+            image_url = self.upload_image(image)
         text_content = f"TITULO PUBLICACION:{payload.title}  CONTENIDO APLICACION:{payload.content}"
         response_status = self.validate_content(message=text_content)
 
