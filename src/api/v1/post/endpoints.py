@@ -29,3 +29,18 @@ async def create(
 ):
     log.info("Create Post")
     return CreatePostService(session=session).create(payload=payload)
+
+
+@router.get(
+    "/{name}",
+    summary="Create post",
+    status_code=status.HTTP_20O_OK,
+    response_model=EnvelopeResponse
+)
+async def get_post(
+    name: str,
+    request: Request,
+    session: Session = Depends(get_session)
+):
+    log.info("Get Post")
+    return CreatePostService(session=session).get_by_oxxo(oxxo_name=name)

@@ -8,3 +8,4 @@ class PostModel(BaseModelClass):
     content = Column(Text, nullable=False)
     image_url = Column(String(500))
     number_of_reactions = Column(Integer, default=0)
+    name = Column(String(250), nullable=False)

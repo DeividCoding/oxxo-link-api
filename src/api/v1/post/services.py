@@ -8,6 +8,8 @@ import cloudinary.uploader
 from core.settings import settings
 from openai import OpenAI
 
+from models.post import PostModel
+
 
 class CreatePostService():
 
@@ -58,3 +60,8 @@ class CreatePostService():
         else:
             response_message = response_status[1]
             return create_envelope_response(data=None,message=response_message,success=False)
+
+
+    def get_by_oxxo(self, oxxo_name):
+        data: list[PostModel] = self.repository_post.get_by_attributes(name=oxxo_name)
+        return create_envelope_response(data=[d.as_dict() for d in data],message=None,success=True)
