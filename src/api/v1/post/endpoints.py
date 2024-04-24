@@ -34,10 +34,9 @@ async def create(
     content: str,
     oxxo_name: str,
     user_name:str,
-    #image: UploadFile = [File(...)],
+    image: UploadFile = [File(...)],
     session: Session = Depends(get_session)
 ):
-    image = None
     log.info("Create Post")
     return CreatePostService(session=session).create(
         CreatePostSchema(
