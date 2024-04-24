@@ -5,7 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from core.utils.exceptions import BaseAppException
 from core.utils.responses import EnvelopeResponse
-
+from core.settings import log
 
 class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
@@ -27,6 +27,8 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
             else:
                 error_detail = {"detail": str(e)}
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+            log.error(e)
 
             response = EnvelopeResponse(errors=error_detail, body=None)
             return JSONResponse(status_code=status_code, content=dict(response))

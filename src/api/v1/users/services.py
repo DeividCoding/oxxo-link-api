@@ -1,15 +1,16 @@
 from api.v1.users.schemas import (
     RequestFavorSchema
 )
-import firebase
+from firebase import firebase
 from core.settings import settings
 from core.utils.responses import create_envelope_response
 
 class FirebaseFavorService:
 
 
-    def _int_(self):
+    def __init__(self):
         self.firebase_session = firebase.FirebaseApplication(settings.FIREBASE_URL, None)
+        print("hola")
 
     def convertToDict(self, model: RequestFavorSchema):
 
