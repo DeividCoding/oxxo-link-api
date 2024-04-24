@@ -18,7 +18,7 @@ router = APIRouter(prefix="/users", tags=["post"])
 
 
 @router.post(
-    "/favor",
+    "/favoare",
     summary="Update",
     status_code=status.HTTP_201_CREATED,
     response_model=EnvelopeResponse

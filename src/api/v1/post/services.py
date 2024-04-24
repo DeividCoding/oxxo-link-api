@@ -7,6 +7,7 @@ from core.utils.responses import create_envelope_response
 import cloudinary.uploader
 from core.settings import settings
 from openai import OpenAI
+from sqlalchemy import select
 
 from models.post import PostModel
 
@@ -57,14 +58,45 @@ class CreatePostService():
                 content=post_created.content,
                 image_url=post_created.image_url,
                 oxxo_name= post_created.oxxo_name,
-                user_name=post_created.user_name
+                user_name=post_created.user_name,
+                number_of_reactions=post_created.number_of_reactions
             )
             return create_envelope_response(data=post_schema,message=None,success=True)
         else:
             response_message = response_status[1]
             return create_envelope_response(data=None,message=response_message,success=False)
 
-
     def get_by_oxxo(self, oxxo_name):
         data: list[PostModel] = self.repository_post.get_by_attributes(oxxo_name=oxxo_name)
         return create_envelope_response(data=[d.as_dict() for d in data],message=None,success=True)
+    
+    def give_like(self,post_id):
+        post = self.repository_post.get_by_id(post_id)
+        post.number_of_reactions+= 1
+        self.session.commit()
+        post_schema = RetrievePostSchema(
+            id=str(post.id),
+            title=post.title,
+            content=post.content,
+            image_url=post.image_url,
+            oxxo_name= post.oxxo_name,
+            user_name=post.user_name,
+            number_of_reactions=post.number_of_reactions
+        )
+        return create_envelope_response(data=post_schema,message=None,success=True)
+
+    def give_unlike(self,post_id):
+        post = self.repository_post.get_by_id(post_id)
+        if post.number_of_reactions>0:
+            post.number_of_reactions-= 1
+            self.session.commit()
+            post_schema = RetrievePostSchema(
+                id=str(post.id),
+                title=post.title,
+                content=post.content,
+                image_url=post.image_url,
+                oxxo_name= post.oxxo_name,
+                user_name=post.user_name,
+                number_of_reactions=post.number_of_reactions
+            )
+            return create_envelope_response(data=post_schema,message=None,success=True)

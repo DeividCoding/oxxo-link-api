@@ -14,3 +14,4 @@ class RetrievePostSchema(BaseModel):
     image_url: str
     oxxo_name: str
     user_name : str
+    number_of_reactions : int
