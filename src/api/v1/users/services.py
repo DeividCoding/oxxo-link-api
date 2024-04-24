@@ -7,22 +7,19 @@ from core.utils.responses import create_envelope_response
 
 class FirebaseFavorService:
 
-
     def __init__(self):
         self.firebase_session = firebase.FirebaseApplication(settings.FIREBASE_URL, None)
-        print("hola")
 
     def convertToDict(self, model: RequestFavorSchema):
-
         return {
-            'user_name': model.user_name,
-            'client': model.client,
+            'oxxo_customer': model.oxxo_customer,
+            'oxxo_friend': model.oxxo_friend,
             'latitude': model.latitude,
             'longitude': model.longitude,
 
         }
 
     def create(self, model: RequestFavorSchema):
-        self.firebase_session.post("/favors", self.convertToDict(model))
+        self.firebase_session.post("/favoare", self.convertToDict(model))
         return create_envelope_response(data=None,message=None,success=True)
 

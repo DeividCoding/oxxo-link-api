@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class RequestFavorSchema(BaseModel):
-    user_name: str
-    client: str
+    oxxo_customer: str
+    oxxo_friend: str
     latitude: float
     longitude: float
