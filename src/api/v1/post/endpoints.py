@@ -34,7 +34,7 @@ async def create(
 @router.get(
     "/{name}",
     summary="Create post",
-    status_code=status.HTTP_20O_OK,
+    status_code=status.HTTP_201_CREATED,
     response_model=EnvelopeResponse
 )
 async def get_post(

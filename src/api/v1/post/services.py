@@ -22,7 +22,7 @@ class CreatePostService():
         response = self.client_open_ai.chat.completions.create(
             model="gpt-4-turbo",
             messages=[
-            {"role": "user", "content": "Hola te enviare un texto y me diras si este es ofensivo o crees que deba publicarse en una app como post si es ofesivo dime 1 so no lo es dime 0 y por $$$ separa el porque es ofensivo o inadecuado"},
+            {"role": "user", "content": "Hola te enviare un texto que esta conformado por un TITULO de la aplicacion y un CONTENIDO de la aplicacion y me diras si este es ofensivo o crees que deba publicarse en una app como post si es ofesivo dime 1 so no lo es dime 0 y por $$$ separa el porque es ofensivo o inadecuado"},
             {"role": "system", "content": "Claro yo te dire si es ofensivo respondiendo con un 1 o si no lo es con un 0"},
             {"role": "user", "content": message}
             ]
@@ -42,7 +42,8 @@ class CreatePostService():
     def create(self, payload: CreatePostSchema):
         image_binary = payload.image
         image_url = self.upload_image(image_binary)
-        response_status = self.validate_content(message=payload.content)
+        text_content = f"TITULO PUBLICACION:{payload.title}  CONTENIDO APLICACION:{payload.content}"
+        response_status = self.validate_content(message=text_content)
 
         if response_status[0].startswith("0"):
             post_created = self.repository_post.add(
