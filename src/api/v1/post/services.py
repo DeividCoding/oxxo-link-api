@@ -55,7 +55,9 @@ class CreatePostService():
                 id=str(post_created.id),
                 title=post_created.title,
                 content=post_created.content,
-                image_url=post_created.image_url
+                image_url=post_created.image_url,
+                oxxo_name= post_created.oxxo_name,
+                user_name=post_created.user_name
             )
             return create_envelope_response(data=post_schema,message=None,success=True)
         else:
@@ -64,5 +66,5 @@ class CreatePostService():
 
 
     def get_by_oxxo(self, oxxo_name):
-        data: list[PostModel] = self.repository_post.get_by_attributes(name=oxxo_name)
+        data: list[PostModel] = self.repository_post.get_by_attributes(oxxo_name=oxxo_name)
         return create_envelope_response(data=[d.as_dict() for d in data],message=None,success=True)

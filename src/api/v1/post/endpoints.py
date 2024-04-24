@@ -32,13 +32,13 @@ async def create(
 
 
 @router.get(
-    "/{name}",
+    "/{oxxo_name}",
     summary="Create post",
     status_code=status.HTTP_201_CREATED,
     response_model=EnvelopeResponse
 )
 async def get_post(
-    name: str,
+    oxxo_name: str,
     request: Request,
     session: Session = Depends(get_session)
 ):
